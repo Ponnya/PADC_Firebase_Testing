@@ -13,16 +13,5 @@ class GroceryItemAdapter : BaseRecyclerAdapter<GroceryItemViewHolder, GroceryVO>
         return GroceryItemViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return 10
-    }
-
-    override fun onBindViewHolder(
-        holder: GroceryItemViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
-
-    }
 }
 

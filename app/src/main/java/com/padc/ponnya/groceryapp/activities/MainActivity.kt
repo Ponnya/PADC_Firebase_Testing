@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.padc.grocery.mvp.presenters.MainPresenter
 import com.padc.grocery.mvp.presenters.impls.MainPresenterImpl
 import com.padc.ponnya.groceryapp.R
 import com.padc.ponnya.groceryapp.adapters.GroceryItemAdapter
+import com.padc.ponnya.groceryapp.data.vos.GroceryVO
 import com.padc.ponnya.groceryapp.databinding.ActivityMainBinding
 import com.padc.ponnya.groceryapp.dialogs.GroceryDialogFragment
 import com.padc.ponnya.groceryapp.mvp.views.MainView
@@ -25,7 +27,7 @@ class MainActivity : AbstractBaseActivity(), MainView {
         setUpRecyclerView()
         mPresenter = getPresenter<MainPresenterImpl, MainView>()
         setUpActionListeners()
-
+        mPresenter.onUiReady(this)
     }
 
     private fun setUpActionListeners() {
@@ -51,5 +53,14 @@ class MainActivity : AbstractBaseActivity(), MainView {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+
+    override fun showGroceryData(groceryList: List<GroceryVO>) {
+        mAdapter.setNewData(groceryList)
+    }
+
+    override fun showErrorMessage(message: String) {
+        Snackbar.make(window.decorView, message, Snackbar.LENGTH_LONG)
     }
 }

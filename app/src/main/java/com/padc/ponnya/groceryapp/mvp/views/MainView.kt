@@ -1,3 +1,8 @@
 package com.padc.ponnya.groceryapp.mvp.views
 
-interface MainView : BaseView
+import com.padc.ponnya.groceryapp.data.vos.GroceryVO
+
+interface MainView : BaseView {
+    fun showGroceryData(groceryList: List<GroceryVO>)
+    fun showErrorMessage(message: String)
+}
