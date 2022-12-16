@@ -2,6 +2,7 @@ package com.padc.ponnya.groceryapp.network
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.padc.ponnya.groceryapp.data.vos.GroceryVO
 import com.padc.ponnya.groceryapp.utils.AMOUNT_FIELD
 import com.padc.ponnya.groceryapp.utils.DESCRIPTION_FIELD
@@ -11,6 +12,7 @@ import com.padc.ponnya.groceryapp.utils.NAME_FIELD
 
 object CloudFireStoreFirebaseApiImpl : FirebaseApi {
     private val db = Firebase.firestore
+    private val storage = FirebaseStorage.getInstance()
     override fun getGroceries(
         onSuccess: (groceries: List<GroceryVO>) -> Unit,
         onFialure: (String) -> Unit

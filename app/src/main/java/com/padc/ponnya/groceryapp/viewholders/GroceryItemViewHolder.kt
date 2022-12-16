@@ -21,5 +21,9 @@ class GroceryItemViewHolder(
         binding.btnEdit.setOnClickListener {
             mDelegate.onTapEditGrocery(data.name ?: "", data.description ?: "", data.amount ?: 0)
         }
+
+        binding.btnFileUpload.setOnClickListener {
+            mDelegate.onTapFileUpload(data)
+        }
     }
 }
