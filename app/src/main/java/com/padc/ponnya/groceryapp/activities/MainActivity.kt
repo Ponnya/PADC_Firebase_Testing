@@ -17,15 +17,16 @@ import com.padc.ponnya.groceryapp.mvp.views.MainView
 class MainActivity : AbstractBaseActivity(), MainView {
 
     private lateinit var binding: ActivityMainBinding
-    private val mAdapter: GroceryItemAdapter = GroceryItemAdapter()
+    private lateinit var mAdapter: GroceryItemAdapter
 
     private lateinit var mPresenter: MainPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setUpRecyclerView()
         mPresenter = getPresenter<MainPresenterImpl, MainView>()
+
+        setUpRecyclerView()
         setUpActionListeners()
         mPresenter.onUiReady(this)
     }
@@ -38,6 +39,7 @@ class MainActivity : AbstractBaseActivity(), MainView {
     }
 
     private fun setUpRecyclerView() {
+        mAdapter = GroceryItemAdapter(mPresenter)
         binding.rvGroceries.adapter = mAdapter
         binding.rvGroceries.layoutManager =
             LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
