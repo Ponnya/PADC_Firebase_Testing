@@ -5,10 +5,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.padc.ponnya.groceryapp.data.vos.GroceryVO
-import com.padc.ponnya.groceryapp.utils.AMOUNT_FIELD
-import com.padc.ponnya.groceryapp.utils.DESCRIPTION_FIELD
-import com.padc.ponnya.groceryapp.utils.GROCERIES_COLLECTION
-import com.padc.ponnya.groceryapp.utils.NAME_FIELD
+import com.padc.ponnya.groceryapp.utils.*
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 
 object CloudFireStoreFirebaseApiImpl : FirebaseApi {
@@ -49,7 +48,8 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
                         val grocery = GroceryVO(
                             name = data[NAME_FIELD] as String,
                             description = data[DESCRIPTION_FIELD] as String,
-                            amount = (data[AMOUNT_FIELD] as Long).toInt()
+                            amount = (data[AMOUNT_FIELD] as Long).toInt(),
+                            image = data[IMAGE_FIELD] as String?
                         )
                         groceryList.add(grocery)
                     }
@@ -62,7 +62,9 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
         val groceryMap = hashMapOf(
             NAME_FIELD to name,
             DESCRIPTION_FIELD to description,
-            AMOUNT_FIELD to amount
+            AMOUNT_FIELD to amount.toLong(),
+            IMAGE_FIELD to image
+
         )
 
         db.collection(GROCERIES_COLLECTION)
@@ -77,7 +79,25 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
     }
 
     override fun uploadImageAndEditGrocery(image: Bitmap, grocery: GroceryVO) {
-        TODO("Not yet implemented")
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+
+        val data = baos.toByteArray()
+        val imageRef = storage.reference.child("images/${UUID.randomUUID()}")
+        imageRef.putBytes(data)
+            .addOnFailureListener { }
+            .addOnSuccessListener { }
+            .continueWithTask {
+                return@continueWithTask imageRef.downloadUrl
+            }.addOnCompleteListener {
+                val imageUrl = it.result?.toString()
+                addGrocery(
+                    grocery.name ?: "",
+                    grocery.description ?: "",
+                    grocery.amount ?: 0,
+                    imageUrl ?: ""
+                )
+            }
     }
 
 }

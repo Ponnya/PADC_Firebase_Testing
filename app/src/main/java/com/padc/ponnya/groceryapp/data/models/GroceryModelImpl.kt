@@ -3,13 +3,13 @@ package com.padc.ponnya.groceryapp.data.models
 
 import android.graphics.Bitmap
 import com.padc.ponnya.groceryapp.data.vos.GroceryVO
+import com.padc.ponnya.groceryapp.network.CloudFireStoreFirebaseApiImpl
 import com.padc.ponnya.groceryapp.network.FirebaseApi
-import com.padc.ponnya.groceryapp.network.RealtimeDatabaseFirebaseApiImpl
 
 object GroceryModelImpl : GroceryModel {
-    override var mFirebaseApi: FirebaseApi = RealtimeDatabaseFirebaseApiImpl
+    //override var mFirebaseApi: FirebaseApi = RealtimeDatabaseFirebaseApiImpl
 
-    //override var mFirebaseApi: FirebaseApi = CloudFireStoreFirebaseApiImpl
+    override var mFirebaseApi: FirebaseApi = CloudFireStoreFirebaseApiImpl
 
 
     override fun getGroceries(onSuccess: (List<GroceryVO>) -> Unit, onFaiure: (String) -> Unit) {

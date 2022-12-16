@@ -7,5 +7,5 @@ class GroceryVO(
     val name: String? = "",
     val description: String? = "",
     val amount: Int? = 0,
-    var image: String = ""
+    var image: String? = ""
 )
