@@ -1,5 +1,6 @@
 package com.padc.ponnya.groceryapp.viewholders
 
+import com.bumptech.glide.Glide
 import com.padc.ponnya.groceryapp.data.vos.GroceryVO
 import com.padc.ponnya.groceryapp.databinding.ViewHolderGroceryItemBinding
 import com.padc.ponnya.groceryapp.delegates.GroceryViewItemActionDelegate
@@ -25,5 +26,9 @@ class GroceryItemViewHolder(
         binding.btnFileUpload.setOnClickListener {
             mDelegate.onTapFileUpload(data)
         }
+
+        Glide.with(binding.root)
+            .load(data.image)
+            .into(binding.ivGroceryImage)
     }
 }

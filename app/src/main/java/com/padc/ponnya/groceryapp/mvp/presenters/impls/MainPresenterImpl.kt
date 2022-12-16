@@ -13,11 +13,13 @@ class MainPresenterImpl : MainPresenter, AbstractBasePresenter<MainView>() {
     private var mChosenGroceryForFileUpload: GroceryVO? = null
 
     override fun onTapAddGrocery(name: String, description: String, amount: Int) {
-        mGroceryModel.addGrocery(name, description, amount)
+        mGroceryModel.addGrocery(name, description, amount, "")
     }
 
     override fun onPhotoTaken(bitmap: Bitmap) {
-
+        mChosenGroceryForFileUpload?.let {
+            mGroceryModel.uploadImageAndUpdateGrocery(it, bitmap)
+        }
     }
 
     override fun onUiReady(owner: LifecycleOwner) {

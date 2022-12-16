@@ -1,5 +1,6 @@
 package com.padc.ponnya.groceryapp.network
 
+import android.graphics.Bitmap
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -57,7 +58,7 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
             }
     }
 
-    override fun addGrocery(name: String, description: String, amount: Int) {
+    override fun addGrocery(name: String, description: String, amount: Int, image: String) {
         val groceryMap = hashMapOf(
             NAME_FIELD to name,
             DESCRIPTION_FIELD to description,
@@ -73,6 +74,10 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
         db.collection(GROCERIES_COLLECTION)
             .document(name)
             .delete()
+    }
+
+    override fun uploadImageAndEditGrocery(image: Bitmap, grocery: GroceryVO) {
+        TODO("Not yet implemented")
     }
 
 }

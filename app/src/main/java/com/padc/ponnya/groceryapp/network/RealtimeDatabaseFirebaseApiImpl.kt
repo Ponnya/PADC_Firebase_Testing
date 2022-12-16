@@ -1,5 +1,6 @@
 package com.padc.ponnya.groceryapp.network
 
+import android.graphics.Bitmap
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -8,6 +9,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.padc.ponnya.groceryapp.data.vos.GroceryVO
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 object RealtimeDatabaseFirebaseApiImpl : FirebaseApi {
     private val database: DatabaseReference = Firebase.database.reference
@@ -34,11 +37,36 @@ object RealtimeDatabaseFirebaseApiImpl : FirebaseApi {
         })
     }
 
-    override fun addGrocery(name: String, description: String, amount: Int) {
-        database.child("groceries").child(name).setValue(GroceryVO(name, description, amount))
+    override fun addGrocery(name: String, description: String, amount: Int, image: String) {
+        database.child("groceries").child(name)
+            .setValue(GroceryVO(name, description, amount, image))
     }
 
     override fun deleteGrocery(name: String) {
         database.child("groceries").child(name).removeValue()
+    }
+
+    override fun uploadImageAndEditGrocery(image: Bitmap, grocery: GroceryVO) {
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+
+        val data = baos.toByteArray()
+        val imageRef = storage.reference.child("images/${UUID.randomUUID()}")
+        val uploadTask = imageRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+            //
+        }.addOnSuccessListener { taskSnapshot ->
+            //
+        }.continueWithTask {
+            return@continueWithTask imageRef.downloadUrl
+        }.addOnCompleteListener {
+            val imageUrl = it.result?.toString()
+            addGrocery(
+                grocery.name ?: "",
+                grocery.description ?: "",
+                grocery.amount ?: 0,
+                imageUrl ?: ""
+            )
+        }
     }
 }
