@@ -17,6 +17,9 @@ class GroceryDialogFragment : DialogFragment() {
 
     companion object {
         const val TAG_ADD_GROCERY_DIALOG = "TAG_ADD_GROCERY_DIALOG"
+        const val BUNDLE_NAME = "BUNDLE_NAME"
+        const val BUNDLE_DESCRIPTION = "BUNDLE_DESCRIPTION"
+        const val BUNDLE_AMOUNT = "BUNDLE_AMOUNT"
 
         fun newFragment(): GroceryDialogFragment {
             return GroceryDialogFragment()
@@ -35,6 +38,10 @@ class GroceryDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpPresenter()
+
+        binding.etGroceryName.setText(arguments?.getString(BUNDLE_NAME))
+        binding.etDescription.setText(arguments?.getString(BUNDLE_DESCRIPTION))
+        binding.etAmount.setText(arguments?.getString(BUNDLE_AMOUNT))
 
         binding.btnAddGrocery.setOnClickListener {
             mPresenter.onTapAddGrocery(

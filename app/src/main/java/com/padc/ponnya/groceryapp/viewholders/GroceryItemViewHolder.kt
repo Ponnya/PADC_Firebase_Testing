@@ -17,5 +17,9 @@ class GroceryItemViewHolder(
         binding.btnDelete.setOnClickListener {
             mDelegate.onTapDeleteButton(data.name ?: "")
         }
+
+        binding.btnEdit.setOnClickListener {
+            mDelegate.onTapEditGrocery(data.name ?: "", data.description ?: "", data.amount ?: 0)
+        }
     }
 }
