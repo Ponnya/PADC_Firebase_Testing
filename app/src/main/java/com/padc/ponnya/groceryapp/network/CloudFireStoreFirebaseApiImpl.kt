@@ -68,7 +68,9 @@ object CloudFireStoreFirebaseApiImpl : FirebaseApi {
     }
 
     override fun deleteGrocery(name: String) {
-
+        db.collection(GROCERIES_COLLECTION)
+            .document(name)
+            .delete()
     }
 
 }
