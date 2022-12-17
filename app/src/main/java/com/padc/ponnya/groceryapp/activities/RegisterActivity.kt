@@ -27,11 +27,13 @@ class RegisterActivity : AbstractBaseActivity(), RegisterView {
 
         setUpPresenter()
         setUpActionListeners()
+        mPresenter.onUiReady(this, this)
     }
 
     private fun setUpActionListeners() {
         binding.btnRegister.setOnClickListener {
             mPresenter.onTapRegister(
+                this,
                 binding.etEmail.text.toString(),
                 binding.etPassword.text.toString(),
                 binding.etUserName.text.toString()

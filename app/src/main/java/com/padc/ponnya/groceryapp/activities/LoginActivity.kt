@@ -30,12 +30,13 @@ class LoginActivity : AbstractBaseActivity(), LoginView {
         setUpPresenter()
         setUpActionListeners()
 
-        mPresenter.onUiReady(this)
+        mPresenter.onUiReady(this, this)
     }
 
     private fun setUpActionListeners() {
         binding.btnLogin.setOnClickListener {
             mPresenter.onTapLogin(
+                this,
                 binding.etEmail.text.toString(),
                 binding.etPassword.text.toString()
             )

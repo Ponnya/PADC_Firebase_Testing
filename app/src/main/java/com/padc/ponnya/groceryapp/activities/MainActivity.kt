@@ -50,7 +50,7 @@ class MainActivity : AbstractBaseActivity(), MainView {
         mPresenter = getPresenter<MainPresenterImpl, MainView>()
 
         setUpActionListeners()
-        mPresenter.onUiReady(this)
+        mPresenter.onUiReady(this, this)
     }
 
     private var resultLauncher =
