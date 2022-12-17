@@ -1,6 +1,7 @@
 package com.padc.ponnya.groceryapp.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.ImageDecoder
 import android.os.Build
@@ -30,6 +31,12 @@ class MainActivity : AbstractBaseActivity(), MainView {
     private lateinit var mAdapter: GroceryItemAdapter
 
     private lateinit var mPresenter: MainPresenter
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +103,10 @@ class MainActivity : AbstractBaseActivity(), MainView {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun showUserName(name: String) {
+        binding.tvUserName.text = "Hello $name!"
     }
 
 
