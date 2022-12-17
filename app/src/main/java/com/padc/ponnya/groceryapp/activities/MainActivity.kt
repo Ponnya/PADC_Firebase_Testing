@@ -10,12 +10,14 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.padc.grocery.mvp.presenters.MainPresenter
 import com.padc.grocery.mvp.presenters.impls.MainPresenterImpl
 import com.padc.ponnya.groceryapp.R
 import com.padc.ponnya.groceryapp.adapters.GroceryItemAdapter
+import com.padc.ponnya.groceryapp.adapters.GroceryItemGridAdapter
 import com.padc.ponnya.groceryapp.data.vos.GroceryVO
 import com.padc.ponnya.groceryapp.databinding.ActivityMainBinding
 import com.padc.ponnya.groceryapp.dialogs.GroceryDialogFragment
@@ -28,9 +30,11 @@ import java.io.IOException
 class MainActivity : AbstractBaseActivity(), MainView {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mAdapter: GroceryItemAdapter
+    private lateinit var mGroceryItemAdapter: GroceryItemAdapter
+    private lateinit var mGroceryItemGridAdapter: GroceryItemGridAdapter
 
     private lateinit var mPresenter: MainPresenter
+    private var mVersion = 0
 
     companion object {
         fun newIntent(context: Context): Intent {
@@ -42,9 +46,9 @@ class MainActivity : AbstractBaseActivity(), MainView {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(findViewById(R.id.toolbar))
         mPresenter = getPresenter<MainPresenterImpl, MainView>()
 
-        setUpRecyclerView()
         setUpActionListeners()
         mPresenter.onUiReady(this)
     }
@@ -86,12 +90,6 @@ class MainActivity : AbstractBaseActivity(), MainView {
         }
     }
 
-    private fun setUpRecyclerView() {
-        mAdapter = GroceryItemAdapter(mPresenter)
-        binding.rvGroceries.adapter = mAdapter
-        binding.rvGroceries.layoutManager =
-            LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -105,13 +103,36 @@ class MainActivity : AbstractBaseActivity(), MainView {
         }
     }
 
+    override fun displayToolbarTitle(title: String) {
+        supportActionBar?.title = title
+    }
+
+    override fun showRecyclerView(version: Int) {
+        mVersion = version
+        if (version < 1) {
+            mGroceryItemAdapter = GroceryItemAdapter(mPresenter)
+            binding.rvGroceries.adapter = mGroceryItemAdapter
+            binding.rvGroceries.layoutManager =
+                LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        } else {
+            mGroceryItemGridAdapter = GroceryItemGridAdapter(mPresenter)
+            binding.rvGroceries.adapter = mGroceryItemGridAdapter
+            binding.rvGroceries.layoutManager =
+                GridLayoutManager(applicationContext, 2, GridLayoutManager.VERTICAL, false)
+        }
+    }
+
     override fun showUserName(name: String) {
         binding.tvUserName.text = "Hello $name!"
     }
 
 
     override fun showGroceryData(groceryList: List<GroceryVO>) {
-        mAdapter.setNewData(groceryList)
+        if (mVersion < 1) {
+            mGroceryItemAdapter.setNewData(groceryList)
+        } else {
+            mGroceryItemGridAdapter.setNewData(groceryList)
+        }
     }
 
     override fun showGroceryDialog(name: String, description: String, amount: String) {

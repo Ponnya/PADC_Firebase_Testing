@@ -31,7 +31,8 @@ class MainPresenterImpl : MainPresenter, AbstractBasePresenter<MainView>() {
         mView.showUserName(
             mAuthenticatioModel.getUserName()
         )
-
+        mView.displayToolbarTitle(mGroceryModel.getAppNameFromRemoteConfig())
+        mView.showRecyclerView(mGroceryModel.getVersion())
 
         mGroceryModel.getGroceries(
             onSuccess = {
