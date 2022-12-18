@@ -3,6 +3,8 @@ package com.padc.ponnya.groceryapp.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import com.google.firebase.messaging.FirebaseMessaging
 import com.padc.ponnya.groceryapp.R
 import com.padc.ponnya.groceryapp.databinding.ActivityLoginBinding
 import com.padc.ponnya.groceryapp.mvp.presenters.LoginPresenter
@@ -29,6 +31,10 @@ class LoginActivity : AbstractBaseActivity(), LoginView {
 
         setUpPresenter()
         setUpActionListeners()
+
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.d("fbToken", it)
+        }
 
         mPresenter.onUiReady(this, this)
     }
